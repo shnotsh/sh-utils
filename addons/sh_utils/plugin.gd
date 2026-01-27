@@ -4,19 +4,9 @@ extends EditorPlugin
 
 func _enable_plugin() -> void:
 	add_autoload_singleton("Debug", "res://addons/sh_utils/debug/debug.tscn")
-	# Add autoloads here.
+	add_autoload_singleton("Utils", "res://addons/sh_utils/utils/utils.gd")
 
 
 func _disable_plugin() -> void:
 	remove_autoload_singleton("Debug")
-	# Remove autoloads here.
-
-
-func _enter_tree() -> void:
-	# Initialization of the plugin goes here.
-	pass
-
-
-func _exit_tree() -> void:
-	# Clean-up of the plugin goes here.
-	pass
+	remove_autoload_singleton("Utils")

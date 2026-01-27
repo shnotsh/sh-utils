@@ -11,18 +11,10 @@ config_version=5
 [application]
 
 config/name="sh-utils"
-config/version="0.01"
+config/version="0.02"
 run/main_scene="uid://de53ltc0xgbu0"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
-
-[autoload]
-
-Debug="*uid://de53ltc0xgbu0"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/sh_utils/plugin.cfg")
 
 [physics]
 

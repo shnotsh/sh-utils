@@ -9,6 +9,12 @@ func _init() -> void:
 		var event = InputEventKey.new()
 		event.physical_keycode = KEY_ESCAPE
 		InputMap.action_add_event("sh_force_quit", event)
+	
+	if not InputMap.has_action("sh_force_reload_scene"):
+		InputMap.add_action("sh_force_reload_scene")
+		var event = InputEventKey.new()
+		event.physical_keycode = KEY_R
+		InputMap.action_add_event("sh_force_reload_scene", event)
 
 	if not InputMap.has_action("sh_toggle_debug_overlays"):
 		InputMap.add_action("sh_toggle_debug_overlays")
@@ -44,6 +50,9 @@ func _input(event: InputEvent) -> void:
 	if show_debug_overlays:
 		if event.is_action_pressed("sh_force_quit"):
 			get_tree().quit()
+		
+		if event.is_action_pressed("sh_force_reload_scene"):
+			get_tree().reload_current_scene()
 
 		if event.is_action_pressed("sh_toggle_vsync"):
 			if DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED:
