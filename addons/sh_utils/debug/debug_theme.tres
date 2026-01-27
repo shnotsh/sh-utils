@@ -1,0 +1,36 @@
+[gd_resource type="Theme" format=3 uid="uid://crj5egtiaymc1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5ul50"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 8.0
+content_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_agkuy"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k5kf6"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(0.47058824, 0.47058824, 0.47058824, 0.7019608)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ivq5k"]
+content_margin_left = 10.0
+content_margin_top = 4.0
+content_margin_right = 10.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.3137255)
+
+[resource]
+TabContainer/styles/panel = SubResource("StyleBoxEmpty_5ul50")
+TabContainer/styles/tab_disabled = SubResource("StyleBoxEmpty_agkuy")
+TabContainer/styles/tab_focus = SubResource("StyleBoxEmpty_agkuy")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxEmpty_agkuy")
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_k5kf6")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_ivq5k")
+TabContainer/styles/tabbar_background = SubResource("StyleBoxEmpty_agkuy")
