@@ -23,16 +23,44 @@ func move_towards_smooth(a: Variant, b: Variant, delta: float) -> Variant:
 ## Converts an array into a string representation, with each element on a new line.
 ## [param array]: The array to convert.
 func array_to_string(array: Array) -> String:
-	var str: String
+	var string: String
 	for member: Variant in array:
-		str += "%s\n" % member
-	return str
+		string += "%s\n" % member
+	return string
 
 
 ## Converts a dictionary into a string representation, with each element on a new line.
 ## [param dictionary]: The dictionary to convert.
-func dictionary_to_string(dictionary: Array) -> String:
-	var str: String
+func dictionary_to_string(dictionary: Dictionary) -> String:
+	var string: String
 	for member: String in dictionary:
-		str += "%s: %s\n" % [member, dictionary[member]]
-	return str
+		string += "%s: %s\n" % [member, dictionary[member]]
+	return string
+
+
+## Converts a boolean value to a custom string.
+## [param boolean]: The boolean value to check.
+## [param true_string]: The string to return if [param boolean] is true.
+## [param false_string]: The string to return if [param boolean] is false.
+func bool_to_string(boolean: bool, true_string: String = "True", false_string: String = "False") -> String:
+	return true_string if boolean else false_string
+
+
+func capture_screenshot() -> void:
+	var screenshots_dir: String = "user://screenshots"
+	var real_dir: String = ProjectSettings.globalize_path(screenshots_dir)
+	if not DirAccess.dir_exists_absolute(screenshots_dir):
+		DirAccess.open("user://").make_dir("screenshots")
+
+	var timestamp: String = Time.get_datetime_string_from_system(false, true)
+	timestamp = timestamp.replace(":", "-").replace(" ", "_")
+	var filename: String = "Screenshot_%s.png" % timestamp
+	var filepath: String = screenshots_dir.path_join(filename)
+
+	var image: Image = get_viewport().get_texture().get_image()
+	var error: Error = image.save_png(filepath)
+
+	if error == OK:
+		print("%s saved: %s" % [filename, real_dir])
+	else:
+		print("Failed to save screenshot: %s" % real_dir)

@@ -24,7 +24,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	perf_label.text = "FPS%s: %s\nCPU: %s\nObjects: %d\nNodes: %d\nPrimitives: %d\nDraw Calls: %d\nVRAM: %.2f MB\nRAM: %.2f MB" % [
-		bool_to_string(DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED, " (VSync)", ""),
+		_bool_to_string(DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED, " (VSync)", ""),
 		Performance.get_monitor(Performance.TIME_FPS),
 		Performance.get_monitor(Performance.TIME_PROCESS) * 1000,
 		Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME),
@@ -54,5 +54,5 @@ func _input(event: InputEvent) -> void:
 				tab_container.current_tab = 4
 
 
-func bool_to_string(value: bool, true_value: String, false_value: String) -> String:
+func _bool_to_string(value: bool, true_value: String, false_value: String) -> String:
 	return true_value if value else false_value
