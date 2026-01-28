@@ -1,7 +1,12 @@
 extends Node
 
-@export var show_debug_overlays: bool = true
-@onready var debug_overlays: Control = $DebugOverlays
+const DEBUG_OVERLAY: PackedScene = preload("res://addons/sh_utils/debug/debug_overlay.tscn")
+
+@export var show_debug_overlay: bool = true
+@export var debug_shortcuts_without_overlay: bool = false
+
+var debug_overlay: Control
+
 
 func _init() -> void:
 	if not InputMap.has_action("sh_force_quit"):
@@ -16,11 +21,11 @@ func _init() -> void:
 		event.physical_keycode = KEY_R
 		InputMap.action_add_event("sh_force_reload_scene", event)
 
-	if not InputMap.has_action("sh_toggle_debug_overlays"):
-		InputMap.add_action("sh_toggle_debug_overlays")
+	if not InputMap.has_action("sh_toggle_debug_overlay"):
+		InputMap.add_action("sh_toggle_debug_overlay")
 		var event = InputEventKey.new()
 		event.physical_keycode = KEY_QUOTELEFT
-		InputMap.action_add_event("sh_toggle_debug_overlays", event)
+		InputMap.action_add_event("sh_toggle_debug_overlay", event)
 
 
 	if not InputMap.has_action("sh_toggle_vsync"):
@@ -46,33 +51,35 @@ func _ready() -> void:
 	if not OS.is_debug_build():
 		queue_free()
 		return
-	debug_overlays.visible = show_debug_overlays
+	debug_overlay = DEBUG_OVERLAY.instantiate()
+	add_child(debug_overlay)
+	debug_overlay.visible = show_debug_overlay
 
 
 func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("sh_toggle_debug_overlays"):
-		show_debug_overlays = !show_debug_overlays
-		debug_overlays.visible = show_debug_overlays
+	if event.is_action_pressed("sh_toggle_debug_overlay"):
+		show_debug_overlay = !show_debug_overlay
+		debug_overlay.visible = show_debug_overlay
 
-	if show_debug_overlays:
+	if show_debug_overlay or debug_shortcuts_without_overlay:
 		if event.is_action_pressed("sh_force_quit"):
+			Config.save_config()
 			get_tree().quit()
 		
 		if event.is_action_pressed("sh_force_reload_scene"):
 			get_tree().reload_current_scene()
 
 		if event.is_action_pressed("sh_toggle_vsync"):
-			if DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED:
-				DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+			if Config.settings["vsync"]:
+				Config.set_vsync(false)
 			else:
-				DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED)
+				Config.set_vsync(true)
 				
 		if event.is_action_pressed("sh_toggle_fullscreen"):
-			var screen: int = DisplayServer.window_get_mode()
-			if screen == DisplayServer.WINDOW_MODE_FULLSCREEN:
-				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			if Config.settings["fullscreen"]:
+				Config.set_fullscreen(false)
 			else:
-				DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+				Config.set_fullscreen(true)
 		
 		if event.is_action_pressed("sh_capture_screenshot"):
 			capture_screenshot()

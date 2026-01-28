@@ -44,3 +44,7 @@ func dictionary_to_string(dictionary: Dictionary) -> String:
 ## [param false_string]: The string to return if [param boolean] is false.
 func bool_to_string(boolean: bool, true_string: String = "True", false_string: String = "False") -> String:
 	return true_string if boolean else false_string
+
+
+func vector2i_to_string(vec: Vector2i, separator: String = "x") -> String:
+	return "%d%s%d" % [vec.x, separator, vec.y]

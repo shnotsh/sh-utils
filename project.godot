@@ -12,9 +12,20 @@ config_version=5
 
 config/name="sh-utils"
 config/version="0.02"
-run/main_scene="uid://de53ltc0xgbu0"
+run/main_scene="uid://o4vuehslko43"
 config/features=PackedStringArray("4.6", "GL Compatibility")
+boot_splash/show_image=false
 config/icon="res://icon.svg"
+
+[autoload]
+
+Utils="*uid://dql4kh1asm01j"
+Debug="*uid://de53ltc0xgbu0"
+Config="*uid://sgtrlkrhqbqu"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/sh_utils/plugin.cfg")
 
 [physics]
 
@@ -23,6 +34,4 @@ config/icon="res://icon.svg"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
