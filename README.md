@@ -52,4 +52,5 @@ Handles persistent settings management.
     - `config_changed` signal: Emitted when any setting changes.
 
 
-** The LSP will report missing references during import, but only until you enable the plugin. Writing junk just to quiet down LSP is dumb. **
+> [!WARNING]
+> The LSP will report missing references during import, but only until you enable the plugin. Writing junk just to quiet down LSP is dumb.
