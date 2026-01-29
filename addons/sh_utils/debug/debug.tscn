@@ -4,4 +4,3 @@
 
 [node name="Debug" type="Node" unique_id=1630132893]
 script = ExtResource("1_1uwqr")
-debug_shortcuts_without_overlay = true

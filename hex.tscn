@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://qr22utlmmf04"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_khich"]
+height = 0.5
+radial_segments = 6
+
+[sub_resource type="Shader" id="Shader_di0uv"]
+code = "shader_type spatial;
+
+instance uniform vec3 a : source_color = vec3(1.0, 1.0, 1.0);
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	
+	ALBEDO.rgb = a.rgb;
+	// Called for every pixel the material is visible on.
+}
+
+//void light() {
+//	// Called for every pixel for every light affecting the material.
+//	// Uncomment to replace the default light processing function with this one.
+//}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_khich"]
+render_priority = 0
+shader = SubResource("Shader_di0uv")
+
+[sub_resource type="GDScript" id="GDScript_djunl"]
+script/source = "extends MeshInstance3D
+
+
+func _process(_delta) -> void:
+	#var mat = get_surface_override_material(0)
+	set_instance_shader_parameter(\"a\", Vector3(randf(), randf(), randf()))
+"
+
+[node name="Hex" type="MeshInstance3D" unique_id=1944732953]
+mesh = SubResource("CylinderMesh_khich")
+surface_material_override/0 = SubResource("ShaderMaterial_khich")
+script = SubResource("GDScript_djunl")

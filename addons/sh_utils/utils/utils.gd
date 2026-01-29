@@ -22,19 +22,21 @@ func move_towards_smooth(a: Variant, b: Variant, delta: float) -> Variant:
 
 ## Converts an array into a string representation, with each element on a new line.
 ## [param array]: The array to convert.
-func array_to_string(array: Array) -> String:
+func str_from_array(array: Array, nl_separation: bool = true) -> String:
 	var string: String
+	var nl: String = "\n" if nl_separation else " "
 	for member: Variant in array:
-		string += "%s\n" % member
+		string += "%s%s" % [member, nl]
 	return string
 
 
 ## Converts a dictionary into a string representation, with each element on a new line.
 ## [param dictionary]: The dictionary to convert.
-func dictionary_to_string(dictionary: Dictionary) -> String:
+func str_from_dict(dict: Dictionary, nl_separation: bool = true) -> String:
 	var string: String
-	for member: String in dictionary:
-		string += "%s: %s\n" % [member, dictionary[member]]
+	var nl: String = "\n" if nl_separation else " "
+	for member: String in dict:
+		string += "%s: %s%s" % [member, dict[member], nl]
 	return string
 
 
@@ -42,9 +44,22 @@ func dictionary_to_string(dictionary: Dictionary) -> String:
 ## [param boolean]: The boolean value to check.
 ## [param true_string]: The string to return if [param boolean] is true.
 ## [param false_string]: The string to return if [param boolean] is false.
-func bool_to_string(boolean: bool, true_string: String = "True", false_string: String = "False") -> String:
+func str_from_bool(boolean: bool, true_string: String = "True", false_string: String = "False") -> String:
 	return true_string if boolean else false_string
 
 
-func vector2i_to_string(vec: Vector2i, separator: String = "x") -> String:
-	return "%d%s%d" % [vec.x, separator, vec.y]
+func str_from_vec(vec: Variant, separator: String = "x") -> String:
+	match typeof(vec):
+		TYPE_VECTOR2:
+			return "%f%s%f" % [vec.x, separator, vec.y]
+		TYPE_VECTOR2I:
+			return "%d%s%d" % [vec.x, separator, vec.y]
+		TYPE_VECTOR3:
+			return "%f%s%f%s%f" % [vec.x, separator, vec.y, separator, vec.z]
+		TYPE_VECTOR3I:
+			return "%d%s%d%s%d" % [vec.x, separator, vec.y, separator, vec.z]
+		TYPE_VECTOR4:
+			return "%f%s%f%s%f%s%f" % [vec.x, separator, vec.y, separator, vec.z, separator, vec.w]
+		TYPE_VECTOR4I:
+			return "%d%s%d%s%d%s%d" % [vec.x, separator, vec.y, separator, vec.z, separator, vec.w]
+	return ""

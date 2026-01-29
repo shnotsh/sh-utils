@@ -4,9 +4,7 @@ signal config_changed
 
 const CONFIG_PATH: String = "user://settings.cfg"
 var verbose: bool = true
-
 var settings: Dictionary = {}
-
 var locales: Array[String] = []
 var loaded_locales: PackedStringArray = TranslationServer.get_loaded_locales()
 var locale: String

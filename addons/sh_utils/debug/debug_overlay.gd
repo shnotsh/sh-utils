@@ -27,21 +27,20 @@ func _ready() -> void:
 		DisplayServer.get_screen_count(),
 		DisplayServer.get_primary_screen(),
 		DisplayServer.window_get_current_screen(),
-		Utils.vector2i_to_string(DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())),
+		Utils.str_from_vec(DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())),
 		DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()),
 		
 	]
 
-	var a: RayCast3D
 	config_label.text = "%s\n%s" % [
 		"%s %s \n[%s]" % [project_name, project_ver, "Config"],
-		Utils.dictionary_to_string(Config.settings),
+		Utils.str_from_dict(Config.settings),
 	]
 
 func _process(_delta: float) -> void:
 	perf_label.text = "%s\nFPS%s: %.0f\nCPU: %.3f\nObjects Drawn: %d\nNodes: %d\nPrimitives: %d\nDraw Calls: %d\nVRAM Usage: %.2f MB\nRAM Usage: %.2f MB\nWindow Size: %s\n" % [
 		"%s %s \n[%s]" % [project_name, project_ver, "Performance"],
-		Utils.bool_to_string(DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED, " (VSync)", ""),
+		Utils.str_from_bool(DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED, " (VSync)", ""),
 		Performance.get_monitor(Performance.TIME_FPS),
 		Performance.get_monitor(Performance.TIME_PROCESS) * 1000,
 		Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME),
@@ -50,14 +49,14 @@ func _process(_delta: float) -> void:
 		Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
 		Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576,
 		Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576,
-		Utils.vector2i_to_string(DisplayServer.window_get_size()),
+		Utils.str_from_vec(DisplayServer.window_get_size()),
 	]
 
 
 func _on_config_changed() -> void:
 	config_label.text = "%s\n%s" % [
 		"%s %s \n[%s]" % [project_name, project_ver, "Config"],
-		Utils.dictionary_to_string(Config.settings),
+		Utils.str_from_dict(Config.settings),
 	]
 
 
