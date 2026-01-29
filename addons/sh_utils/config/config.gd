@@ -1,76 +1,90 @@
 extends Node
 
-signal config_changed
+signal setting_changed(key: String, value: Variant)
 
 const CONFIG_PATH: String = "user://settings.cfg"
-var verbose: bool = true
-var settings: Dictionary = {}
-var locales: Array[String] = []
+const DEFAULT_SETTINGS: Dictionary = {
+	"locale": "en",
+	"fullscreen": true,
+	"vsync": false,
+}
+
+var verbose: bool
+var locales: Array[String]
 var loaded_locales: PackedStringArray = TranslationServer.get_loaded_locales()
 var locale: String
 
+var _config_global_path: StringName
+var _settings: Dictionary
+
 
 func _init() -> void:
-	load_config()
-	apply_config()
-	save_config()
+	if OS.is_debug_build() and Debug.verbose:
+		verbose = true
+	
+	_config_global_path = ProjectSettings.globalize_path(CONFIG_PATH)
+	_settings = DEFAULT_SETTINGS.duplicate()
+	
 	Debug.debug_force_quit.connect(_on_debug_force_quit)
 	Debug.debug_toggle_fullscreen.connect(_on_debug_toggle_fullscreen)
 	Debug.debug_toggle_vsync.connect(_on_debug_toggle_vsync)
-
-
-func get_config(cfg: ConfigFile) -> Dictionary:
-	var _dict: Dictionary = {
-		"locale": cfg.get_value("game", "locale", "en"),
-		"fullscreen": cfg.get_value("video", "fullscreen", true),
-		"vsync": cfg.get_value("video", "vsync", true),
-	}
-	return _dict
-
-
-func set_config(dict: Dictionary) -> ConfigFile:
-	var _cfg: ConfigFile = ConfigFile.new()
-	_cfg.set_value("game", "locale", dict["locale"])
-	_cfg.set_value("video", "fullscreen", dict["fullscreen"])
-	_cfg.set_value("video", "vsync", dict["vsync"])
-	return _cfg
-
-
-func apply_config():
-	set_locale(settings["locale"])
-	set_fullscreen(settings["fullscreen"])
-	set_vsync(settings["vsync"])
+	
+	load_config()
 
 
 func load_config() -> void:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: int = cfg.load(CONFIG_PATH)
+	if err != OK:
+		printerr("sh-utils: [Config] ERROR: Failed to load config file (Error code: %d). Using defaults." % err)
+		return
 
-	if err == OK:
-		settings = get_config(cfg)
+	if verbose: print("sh-utils: [Config] loaded from ", _config_global_path)
 
-	if OS.is_debug_build() and verbose:
-		var real_dir: String = ProjectSettings.globalize_path(CONFIG_PATH)
-		print("sh-utils: [Config] loaded from ", real_dir)
+	_settings["locale"] = cfg.get_value("game", "locale", DEFAULT_SETTINGS["locale"])
+	_settings["fullscreen"] = cfg.get_value("video", "fullscreen", DEFAULT_SETTINGS["fullscreen"])
+	_settings["vsync"] = cfg.get_value("video", "vsync", DEFAULT_SETTINGS["vsync"])
+
+	apply_config()
+
+
+func apply_config() -> void:
+	set_locale(get_setting("locale"))
+	set_fullscreen(get_setting("fullscreen"))
+	set_vsync(get_setting("vsync"))
+
+
+func get_setting(key: String, default: Variant = null) -> Variant:
+	return _settings.get(key, default)
+
+
+func get_all_settings() -> Dictionary:
+	return _settings.duplicate()
+
+
+func set_config(dict: Dictionary) -> ConfigFile:
+	var _cfg: ConfigFile = ConfigFile.new()
+	_cfg.set_value("game", "locale", dict.get("locale", DEFAULT_SETTINGS["locale"]))
+	_cfg.set_value("video", "fullscreen", dict.get("fullscreen", DEFAULT_SETTINGS["fullscreen"]))
+	_cfg.set_value("video", "vsync", dict.get("vsync", DEFAULT_SETTINGS["vsync"]))
+	return _cfg
 
 
 func save_config() -> void:
-	var cfg: ConfigFile = set_config(settings)
+	var cfg: ConfigFile = set_config(_settings)
 	var save_result: int = cfg.save(CONFIG_PATH)
-	if OS.is_debug_build() and verbose:
-		var real_dir: String = ProjectSettings.globalize_path(CONFIG_PATH)
-		if save_result == OK:
-			print("sh-utils: [Config] saved to ", real_dir)
-		else:
-			printerr("sh-utils: [Config] ERROR: Failed to save config to ", real_dir, " (error code: ", save_result, ")")
+	if save_result != OK:
+		printerr("sh-utils: [Config] ERROR: Failed to save config to ", _config_global_path, " (error code: ", save_result, ")")
+		return
+	if verbose: print("sh-utils: [Config] saved to ", _config_global_path)
 
 
 func get_locales() -> Array[String]:
 	locales.clear()
 	if loaded_locales.is_empty():
 		locales.append("en")
-	for locale: String in loaded_locales:
-		locales.append(String(locale))
+	for _locale: String in loaded_locales:
+		locales.append(_locale)
 	return locales
 
 
@@ -92,36 +106,32 @@ func _on_debug_force_quit() -> void:
 
 
 func _on_debug_toggle_vsync() -> void:
-	if settings["vsync"]:
-		set_vsync(false)
-	else:
-		set_vsync(true)
+	set_vsync(not get_setting("vsync", true))
 
 
 func _on_debug_toggle_fullscreen() -> void:
-	if settings["fullscreen"]:
-		set_fullscreen(false)
-	else:
-		set_fullscreen(true)
+	set_fullscreen(not get_setting("fullscreen", true))
 
 
-func set_locale(locale: String) -> void:
-	if locales.has(locale):
-		settings["locale"] = locale
-		TranslationServer.set_locale(locale)
-	else:
-		settings["locale"] = "en"
-		TranslationServer.set_locale("en")
-	config_changed.emit()
+func set_locale(new_locale: String) -> void:
+	if not locales.has(new_locale):
+		new_locale = "en"
+	
+	if _settings.get("locale") != new_locale:
+		_settings["locale"] = new_locale
+		TranslationServer.set_locale(new_locale)
+		setting_changed.emit("locale", new_locale)
 
 
 func set_fullscreen(val: bool) -> void:
-	settings["fullscreen"] = val
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if val else DisplayServer.WINDOW_MODE_WINDOWED)
-	config_changed.emit()
+	if _settings.get("fullscreen") != val:
+		_settings["fullscreen"] = val
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if val else DisplayServer.WINDOW_MODE_WINDOWED)
+		setting_changed.emit("fullscreen", val)
 
 
 func set_vsync(val: bool) -> void:
-	settings["vsync"] = val
-	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if val else DisplayServer.VSYNC_DISABLED)
-	config_changed.emit()
+	if _settings.get("vsync") != val:
+		_settings["vsync"] = val
+		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if val else DisplayServer.VSYNC_DISABLED)
+		setting_changed.emit("vsync", val)

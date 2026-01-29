@@ -10,8 +10,6 @@ var project_ver: String = ProjectSettings.get_setting("application/config/versio
 
 
 func _ready() -> void:
-	Config.config_changed.connect(_on_config_changed)
-
 	sys_info_label.text = "%s\nPlatform: %s\nCPU: %s\nCPU Cores: %d\nGPU: %s\nAPI version: %s\nRendering Driver: %s\nRAM: %.2f MB\nSystem Locale: %s\nDisplays Count: %d\nPrimary Display ID: %d\nCurrent Display ID: %d\nCurrent Display Size: %s\nCurrent Display DPI: %d\n" % [
 		"%s %s \n[%s]" % [project_name, project_ver, "Hardware"],
 		OS.get_name(),
@@ -27,9 +25,8 @@ func _ready() -> void:
 		DisplayServer.window_get_current_screen(),
 		Utils.str_from_vec(DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())),
 		DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()),
-		
 	]
-	_on_config_changed()
+	grab_config()
 
 
 func _process(_delta: float) -> void:
@@ -48,17 +45,16 @@ func _process(_delta: float) -> void:
 	]
 
 
-func _on_config_changed() -> void:
+func grab_config() -> void:
 	config_label.text = "%s\n%s" % [
 		"%s %s \n[%s]" % [project_name, project_ver, "Config"],
-		Utils.str_from_dict(Config.settings),
+		Utils.str_from_dict(Config.get_all_settings()),
 	]
 
 
 func _input(event: InputEvent) -> void:
 	if not visible:
 		return
-
 	if event is InputEventKey and event.pressed:
 		match event.keycode:
 			KEY_1:

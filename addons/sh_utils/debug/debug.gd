@@ -8,6 +8,7 @@ const DEBUG_OVERLAY: PackedScene = preload("res://addons/sh_utils/debug/debug_ov
 
 @export var show_debug_overlay: bool = true
 @export var debug_shortcuts_without_overlay: bool = false
+@export var verbose: bool = true
 
 var debug_overlay: Control
 
@@ -55,6 +56,7 @@ func _ready() -> void:
 	if not OS.is_debug_build():
 		queue_free()
 		return
+
 	debug_overlay = DEBUG_OVERLAY.instantiate()
 	add_child(debug_overlay)
 	debug_overlay.visible = show_debug_overlay
