@@ -14,6 +14,9 @@ func _init() -> void:
 	load_config()
 	apply_config()
 	save_config()
+	Debug.debug_force_quit.connect(_on_debug_force_quit)
+	Debug.debug_toggle_fullscreen.connect(_on_debug_toggle_fullscreen)
+	Debug.debug_toggle_vsync.connect(_on_debug_toggle_vsync)
 
 
 func get_config(cfg: ConfigFile) -> Dictionary:
@@ -34,7 +37,6 @@ func set_config(dict: Dictionary) -> ConfigFile:
 
 
 func apply_config():
-	var dict: Dictionary = settings
 	set_locale(settings["locale"])
 	set_fullscreen(settings["fullscreen"])
 	set_vsync(settings["vsync"])
@@ -82,6 +84,25 @@ func get_system_locale() -> String:
 	if locales.has("en"):
 		return "en"
 	return locales[0] if not locales.is_empty() else "en"
+
+
+func _on_debug_force_quit() -> void:
+	save_config()
+	get_tree().quit()
+
+
+func _on_debug_toggle_vsync() -> void:
+	if settings["vsync"]:
+		set_vsync(false)
+	else:
+		set_vsync(true)
+
+
+func _on_debug_toggle_fullscreen() -> void:
+	if settings["fullscreen"]:
+		set_fullscreen(false)
+	else:
+		set_fullscreen(true)
 
 
 func set_locale(locale: String) -> void:

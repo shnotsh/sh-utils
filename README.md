@@ -51,3 +51,5 @@ Handles persistent settings management.
     - `set_locale(string)`: Updates game locale.
     - `config_changed` signal: Emitted when any setting changes.
 
+
+** The LSP will report missing references during import, but only until you enable the plugin. Writing junk just to quiet down LSP is dumb. **

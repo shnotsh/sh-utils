@@ -1,5 +1,9 @@
 extends Node
 
+signal debug_force_quit
+signal debug_toggle_fullscreen
+signal debug_toggle_vsync
+
 const DEBUG_OVERLAY: PackedScene = preload("res://addons/sh_utils/debug/debug_overlay.tscn")
 
 @export var show_debug_overlay: bool = true
@@ -63,23 +67,16 @@ func _input(event: InputEvent) -> void:
 
 	if show_debug_overlay or debug_shortcuts_without_overlay:
 		if event.is_action_pressed("sh_force_quit"):
-			Config.save_config()
-			get_tree().quit()
+			debug_force_quit.emit()
 		
 		if event.is_action_pressed("sh_force_reload_scene"):
 			get_tree().reload_current_scene()
 
 		if event.is_action_pressed("sh_toggle_vsync"):
-			if Config.settings["vsync"]:
-				Config.set_vsync(false)
-			else:
-				Config.set_vsync(true)
+			debug_toggle_vsync.emit()
 				
 		if event.is_action_pressed("sh_toggle_fullscreen"):
-			if Config.settings["fullscreen"]:
-				Config.set_fullscreen(false)
-			else:
-				Config.set_fullscreen(true)
+			debug_toggle_fullscreen.emit()
 		
 		if event.is_action_pressed("sh_capture_screenshot"):
 			capture_screenshot()

@@ -5,14 +5,12 @@ extends Control
 @onready var config_label: Label = %"ConfigLabel"
 @onready var tab_container: TabContainer = $DebugPerformanceOverlay/TabContainer
 
-var project_name: String
-var project_ver: String
+var project_name: String = ProjectSettings.get_setting("application/config/name", "Untitled")
+var project_ver: String = ProjectSettings.get_setting("application/config/version", "0.0")
+
 
 func _ready() -> void:
 	Config.config_changed.connect(_on_config_changed)
-
-	project_name = ProjectSettings.get_setting("application/config/name", "Untitled")
-	project_ver = ProjectSettings.get_setting("application/config/version", "0.0")
 
 	sys_info_label.text = "%s\nPlatform: %s\nCPU: %s\nCPU Cores: %d\nGPU: %s\nAPI version: %s\nRendering Driver: %s\nRAM: %.2f MB\nSystem Locale: %s\nDisplays Count: %d\nPrimary Display ID: %d\nCurrent Display ID: %d\nCurrent Display Size: %s\nCurrent Display DPI: %d\n" % [
 		"%s %s \n[%s]" % [project_name, project_ver, "Hardware"],
@@ -31,16 +29,13 @@ func _ready() -> void:
 		DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()),
 		
 	]
+	_on_config_changed()
 
-	config_label.text = "%s\n%s" % [
-		"%s %s \n[%s]" % [project_name, project_ver, "Config"],
-		Utils.str_from_dict(Config.settings),
-	]
 
 func _process(_delta: float) -> void:
 	perf_label.text = "%s\nFPS%s: %.0f\nCPU: %.3f\nObjects Drawn: %d\nNodes: %d\nPrimitives: %d\nDraw Calls: %d\nVRAM Usage: %.2f MB\nRAM Usage: %.2f MB\nWindow Size: %s\n" % [
 		"%s %s \n[%s]" % [project_name, project_ver, "Performance"],
-		Utils.str_from_bool(DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED, " (VSync)", ""),
+		" (VSync)" if DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED else "",
 		Performance.get_monitor(Performance.TIME_FPS),
 		Performance.get_monitor(Performance.TIME_PROCESS) * 1000,
 		Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME),
