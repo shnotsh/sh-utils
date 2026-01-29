@@ -20,23 +20,23 @@ func move_towards_smooth(a: Variant, b: Variant, delta: float) -> Variant:
 	return lerp(a, b, - (exp(-delta) - 1))
 
 
-## Converts an array into a string representation, with each element on a new line.
+## Converts an array into a string representation.
 ## [param array]: The array to convert.
-func str_from_array(array: Array, nl_separation: bool = true) -> String:
+## [param members_separator]: Specified separator to include between members, "\n" by default.
+func str_from_array(array: Array, members_separator: String = "\n") -> String:
 	var string: String
-	var nl: String = "\n" if nl_separation else " "
 	for member: Variant in array:
-		string += "%s%s" % [member, nl]
+		string += "%s%s" % [member, members_separator]
 	return string
 
 
-## Converts a dictionary into a string representation, with each element on a new line.
-## [param dictionary]: The dictionary to convert.
-func str_from_dict(dict: Dictionary, nl_separation: bool = true) -> String:
+## Converts a dictionary into a string representation.
+## [param dict]: The dictionary to convert.
+## [param members_separator]: Specified separator to include between members, "\n" by default.
+func str_from_dict(dict: Dictionary, members_separator: String = "\n") -> String:
 	var string: String
-	var nl: String = "\n" if nl_separation else " "
 	for member: String in dict:
-		string += "%s: %s%s" % [member, dict[member], nl]
+		string += "%s: %s%s" % [member, dict[member], members_separator]
 	return string
 
 
@@ -48,6 +48,9 @@ func str_from_bool(boolean: bool, true_string: String = "True", false_string: St
 	return true_string if boolean else false_string
 
 
+## Converts a vector (Vector2, Vector3, Vector4 or integer variants) to a string representation.
+## [param vec]: The vector to convert.
+## [param separator]: The separator string to use between components.
 func str_from_vec(vec: Variant, separator: String = "x") -> String:
 	match typeof(vec):
 		TYPE_VECTOR2:
