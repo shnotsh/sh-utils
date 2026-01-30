@@ -7,12 +7,12 @@ extends Control
 
 
 func _ready() -> void:
-	sys_info_label.text = "Hardware ■\n%s" % Utils.str_from_dict(Debug.get_hardware_info())
-	config_label.text = "Config ■\n%s" % Utils.str_from_dict(Config.get_all_settings())
+	sys_info_label.text = "[Hardware]\n%s" % Utils.str_from_dict(Debug.get_hardware_info())
+	config_label.text = "[Config]\n%s" % Utils.str_from_dict(Config.get_all_settings())
 
 
 func _physics_process(_delta: float) -> void:
-	perf_label.text = "Performance ■\n%s" % Utils.str_from_dict(Debug.get_performance_info())
+	perf_label.text = "[Performance]\n%s" % Utils.str_from_dict(Debug.get_performance_info())
 
 
 func _input(event: InputEvent) -> void:
@@ -26,7 +26,3 @@ func _input(event: InputEvent) -> void:
 				tab_container.current_tab = 1
 			KEY_3:
 				tab_container.current_tab = 2
-			KEY_4:
-				tab_container.current_tab = 3
-			KEY_5:
-				tab_container.current_tab = 4
