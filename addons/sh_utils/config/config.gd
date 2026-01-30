@@ -19,17 +19,18 @@ var _settings: Dictionary
 
 
 func _init() -> void:
-	if OS.is_debug_build() and Debug.verbose:
-		verbose = true
-	
+	if OS.is_debug_build():
+		verbose = Debug.verbose
+		Debug.debug_force_quit.connect(_on_debug_force_quit)
+		Debug.debug_toggle_fullscreen.connect(_on_debug_toggle_fullscreen)
+		Debug.debug_toggle_vsync.connect(_on_debug_toggle_vsync)
+
 	_config_global_path = ProjectSettings.globalize_path(CONFIG_PATH)
 	_settings = DEFAULT_SETTINGS.duplicate()
-	
-	Debug.debug_force_quit.connect(_on_debug_force_quit)
-	Debug.debug_toggle_fullscreen.connect(_on_debug_toggle_fullscreen)
-	Debug.debug_toggle_vsync.connect(_on_debug_toggle_vsync)
+
 	
 	load_config()
+	set_config(_settings)
 
 
 func load_config() -> void:
@@ -100,6 +101,11 @@ func get_system_locale() -> String:
 	return locales[0] if not locales.is_empty() else "en"
 
 
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_EXIT_TREE:
+		save_config()
+
+
 func _on_debug_force_quit() -> void:
 	save_config()
 	get_tree().quit()
@@ -117,21 +123,18 @@ func set_locale(new_locale: String) -> void:
 	if not locales.has(new_locale):
 		new_locale = "en"
 	
-	if _settings.get("locale") != new_locale:
-		_settings["locale"] = new_locale
-		TranslationServer.set_locale(new_locale)
-		setting_changed.emit("locale", new_locale)
+	_settings["locale"] = new_locale
+	TranslationServer.set_locale(new_locale)
+	setting_changed.emit("locale", new_locale)
 
 
 func set_fullscreen(val: bool) -> void:
-	if _settings.get("fullscreen") != val:
-		_settings["fullscreen"] = val
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if val else DisplayServer.WINDOW_MODE_WINDOWED)
-		setting_changed.emit("fullscreen", val)
+	_settings["fullscreen"] = val
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN if val else DisplayServer.WINDOW_MODE_WINDOWED)
+	setting_changed.emit("fullscreen", val)
 
 
 func set_vsync(val: bool) -> void:
-	if _settings.get("vsync") != val:
-		_settings["vsync"] = val
-		DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if val else DisplayServer.VSYNC_DISABLED)
-		setting_changed.emit("vsync", val)
+	_settings["vsync"] = val
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_ENABLED if val else DisplayServer.VSYNC_DISABLED)
+	setting_changed.emit("vsync", val)

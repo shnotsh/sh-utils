@@ -10,8 +10,23 @@ var project_ver: String = ProjectSettings.get_setting("application/config/versio
 
 
 func _ready() -> void:
-	sys_info_label.text = "%s\nPlatform: %s\nCPU: %s\nCPU Cores: %d\nGPU: %s\nAPI version: %s\nRendering Driver: %s\nRAM: %.2f MB\nSystem Locale: %s\nDisplays Count: %d\nPrimary Display ID: %d\nCurrent Display ID: %d\nCurrent Display Size: %s\nCurrent Display DPI: %d\n" % [
-		"%s %s \n[%s]" % [project_name, project_ver, "Hardware"],
+	sys_info_label.text = "%s
+	[Hardware]
+	Platform: %s
+	CPU: %s
+	CPU Cores: %d
+	GPU: %s
+	API version: %s
+	Rendering Driver: %s
+	RAM: %.2f MB
+	System Locale: %s
+	Displays Count: %d
+	Primary Display ID: %d
+	Current Display ID: %d
+	Current Display Size: %s
+	Current Display DPI: %d
+	" % [
+		"%s %s" % [project_name, project_ver],
 		OS.get_name(),
 		"Unknown" if OS.get_processor_name() == "" else OS.get_processor_name(),
 		OS.get_processor_count(),
@@ -29,9 +44,20 @@ func _ready() -> void:
 	grab_config()
 
 
-func _process(_delta: float) -> void:
-	perf_label.text = "%s\nFPS%s: %.0f\nCPU: %.3f\nObjects Drawn: %d\nNodes: %d\nPrimitives: %d\nDraw Calls: %d\nVRAM Usage: %.2f MB\nRAM Usage: %.2f MB\nWindow Size: %s\n" % [
-		"%s %s \n[%s]" % [project_name, project_ver, "Performance"],
+func _physics_process(_delta: float) -> void:
+	perf_label.text = "%s
+	[Performace]
+	FPS%s: %.0f
+	CPU: %.3f
+	Objects Drawn: %d
+	Nodes: %d
+	Primitives: %d
+	Draw Calls: %d
+	VRAM Usage: %.2f MB
+	RAM Usage: %.2f MB
+	Window Size: %s
+	" % [
+		"%s %s" % [project_name, project_ver],
 		" (VSync)" if DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED else "",
 		Performance.get_monitor(Performance.TIME_FPS),
 		Performance.get_monitor(Performance.TIME_PROCESS) * 1000,
@@ -47,7 +73,8 @@ func _process(_delta: float) -> void:
 
 func grab_config() -> void:
 	config_label.text = "%s\n%s" % [
-		"%s %s \n[%s]" % [project_name, project_ver, "Config"],
+		"%s %s
+		[Config]" % [project_name, project_ver],
 		Utils.str_from_dict(Config.get_all_settings()),
 	]
 
