@@ -8,7 +8,6 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"fullscreen": true,
 	"vsync": false,
 }
-
 var verbose: bool
 var locales: Array[String]
 var loaded_locales: PackedStringArray = TranslationServer.get_loaded_locales()
@@ -87,18 +86,6 @@ func get_locales() -> Array[String]:
 	for _locale: String in loaded_locales:
 		locales.append(_locale)
 	return locales
-
-
-func get_system_locale() -> String:
-	var system_locale: String = OS.get_locale()
-	if locales.has(system_locale):
-		return system_locale
-	var lang_part: String = system_locale.split("_")[0]
-	if locales.has(lang_part):
-		return lang_part
-	if locales.has("en"):
-		return "en"
-	return locales[0] if not locales.is_empty() else "en"
 
 
 func _notification(what: int) -> void:

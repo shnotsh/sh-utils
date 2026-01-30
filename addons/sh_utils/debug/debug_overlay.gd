@@ -5,78 +5,14 @@ extends Control
 @onready var config_label: Label = %"ConfigLabel"
 @onready var tab_container: TabContainer = $DebugPerformanceOverlay/TabContainer
 
-var project_name: String = ProjectSettings.get_setting("application/config/name", "Untitled")
-var project_ver: String = ProjectSettings.get_setting("application/config/version", "0.0")
-
 
 func _ready() -> void:
-	sys_info_label.text = "%s
-	[Hardware]
-	Platform: %s
-	CPU: %s
-	CPU Cores: %d
-	GPU: %s
-	API version: %s
-	Rendering Driver: %s
-	RAM: %.2f MB
-	System Locale: %s
-	Displays Count: %d
-	Primary Display ID: %d
-	Current Display ID: %d
-	Current Display Size: %s
-	Current Display DPI: %d
-	" % [
-		"%s %s" % [project_name, project_ver],
-		OS.get_name(),
-		"Unknown" if OS.get_processor_name() == "" else OS.get_processor_name(),
-		OS.get_processor_count(),
-		RenderingServer.get_video_adapter_name(),
-		RenderingServer.get_video_adapter_api_version(),
-		RenderingServer.get_current_rendering_driver_name(),
-		OS.get_memory_info()["physical"] / 1048576,
-		OS.get_locale(),
-		DisplayServer.get_screen_count(),
-		DisplayServer.get_primary_screen(),
-		DisplayServer.window_get_current_screen(),
-		Utils.str_from_vec(DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())),
-		DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()),
-	]
-	grab_config()
+	sys_info_label.text = "Hardware ■\n%s" % Utils.str_from_dict(Debug.get_hardware_info())
+	config_label.text = "Config ■\n%s" % Utils.str_from_dict(Config.get_all_settings())
 
 
 func _physics_process(_delta: float) -> void:
-	perf_label.text = "%s
-	[Performace]
-	FPS%s: %.0f
-	CPU: %.3f
-	Objects Drawn: %d
-	Nodes: %d
-	Primitives: %d
-	Draw Calls: %d
-	VRAM Usage: %.2f MB
-	RAM Usage: %.2f MB
-	Window Size: %s
-	" % [
-		"%s %s" % [project_name, project_ver],
-		" (VSync)" if DisplayServer.window_get_vsync_mode() == DisplayServer.VSYNC_ENABLED else "",
-		Performance.get_monitor(Performance.TIME_FPS),
-		Performance.get_monitor(Performance.TIME_PROCESS) * 1000,
-		Performance.get_monitor(Performance.RENDER_TOTAL_OBJECTS_IN_FRAME),
-		Performance.get_monitor(Performance.OBJECT_NODE_COUNT),
-		Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),
-		Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
-		Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1048576,
-		Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576,
-		Utils.str_from_vec(DisplayServer.window_get_size()),
-	]
-
-
-func grab_config() -> void:
-	config_label.text = "%s\n%s" % [
-		"%s %s
-		[Config]" % [project_name, project_ver],
-		Utils.str_from_dict(Config.get_all_settings()),
-	]
+	perf_label.text = "Performance ■\n%s" % Utils.str_from_dict(Debug.get_performance_info())
 
 
 func _input(event: InputEvent) -> void:
