@@ -1,6 +1,6 @@
 # <img src="icon.svg" width="42" height="42" align="top" /> SH Utils
 
-Personal Godot Utilities plugin.
+Personal Godot Utilities plugin. A lightweight, drop-in solution providing essential utility helpers to streamline initial development and eliminate the need to rewrite boilerplate for every new project.
 
 ## Installation
 
