@@ -83,7 +83,7 @@ func set_debug_keyboard_actions() -> void:
 		var event = InputEventKey.new()
 		event.physical_keycode = KEY_ESCAPE
 		InputMap.action_add_event("sh_force_quit", event)
-	
+
 	if not InputMap.has_action("sh_force_reload_scene"):
 		InputMap.add_action("sh_force_reload_scene")
 		var event = InputEventKey.new()

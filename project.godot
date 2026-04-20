@@ -14,6 +14,7 @@ config/name="sh-utils"
 config/version="0.14"
 run/main_scene="uid://b56paf0ua1k8m"
 config/features=PackedStringArray("4.6", "GL Compatibility")
+boot_splash/bg_color=Color(0.96474224, 0.96474224, 0.9647421, 1)
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 
@@ -34,7 +35,7 @@ enabled=PackedStringArray("res://addons/sh_utils/plugin.cfg")
 [rendering]
 
 rendering_device/driver.windows="d3d12"
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
+renderer/rendering_method="mobile"
 textures/vram_compression/import_etc2_astc=true
 limits/global_shader_variables/buffer_size=75536
+environment/defaults/default_clear_color=Color(0.9779369, 0.97793704, 0.9779369, 1)

@@ -27,7 +27,7 @@ func _init() -> void:
 	_config_global_path = ProjectSettings.globalize_path(CONFIG_PATH)
 	_settings = DEFAULT_SETTINGS.duplicate()
 
-	
+
 	load_config()
 	set_config(_settings)
 
@@ -109,7 +109,7 @@ func _on_debug_toggle_fullscreen() -> void:
 func set_locale(new_locale: String) -> void:
 	if not locales.has(new_locale):
 		new_locale = "en"
-	
+
 	_settings["locale"] = new_locale
 	TranslationServer.set_locale(new_locale)
 	setting_changed.emit("locale", new_locale)
