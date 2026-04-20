@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ciwlj3vy1mslu"]
 
-[ext_resource type="Theme" uid="uid://crj5egtiaymc1" path="res://addons/sh_utils/debug/debug_theme.tres" id="1_uyam7"]
+[ext_resource type="Theme" uid="uid://dkxqkhpefh2hi" path="res://addons/sh_utils/debug/debug_theme.tres" id="1_uyam7"]
 [ext_resource type="Script" uid="uid://c7viasqphqug3" path="res://addons/sh_utils/debug/debug_overlay.gd" id="2_l7xgc"]
 
 [node name="DebugOverlay" type="Control" unique_id=877863632]
@@ -13,7 +13,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_uyam7")
 script = ExtResource("2_l7xgc")
-dark_mode = true
 
 [node name="DebugPerformanceOverlay" type="MarginContainer" parent="." unique_id=121557348]
 layout_mode = 1
@@ -33,7 +32,6 @@ theme_override_constants/margin_bottom = 0
 layout_mode = 2
 tab_alignment = 2
 current_tab = 0
-clip_tabs = false
 all_tabs_in_front = true
 tab_0/title = "1"
 tab_1/title = "2"

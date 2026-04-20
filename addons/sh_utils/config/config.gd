@@ -36,10 +36,10 @@ func load_config() -> void:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: int = cfg.load(CONFIG_PATH)
 	if err != OK:
-		printerr("sh-utils: [Config] ERROR: Failed to load config file (Error code: %d). Using defaults." % err)
+		printerr("\nsh-utils: [Config] ERROR: Failed to load config file (Error code: %d). Using defaults." % err)
 		return
 
-	if verbose: print("sh-utils: [Config] loaded from ", _config_global_path)
+	if verbose: print("\nsh-utils: [Config] loaded from ", _config_global_path)
 
 	_settings["locale"] = cfg.get_value("game", "locale", DEFAULT_SETTINGS["locale"])
 	_settings["fullscreen"] = cfg.get_value("video", "fullscreen", DEFAULT_SETTINGS["fullscreen"])
@@ -74,9 +74,9 @@ func save_config() -> void:
 	var cfg: ConfigFile = set_config(_settings)
 	var save_result: int = cfg.save(CONFIG_PATH)
 	if save_result != OK:
-		printerr("sh-utils: [Config] ERROR: Failed to save config to ", _config_global_path, " (error code: ", save_result, ")")
+		printerr("\nsh-utils: [Config] ERROR: Failed to save config to ", _config_global_path, " (error code: ", save_result, ")")
 		return
-	if verbose: print("sh-utils: [Config] saved to ", _config_global_path)
+	if verbose: print("\nsh-utils: [Config] saved to ", _config_global_path)
 
 
 func get_locales() -> Array[String]:
