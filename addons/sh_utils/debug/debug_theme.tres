@@ -36,6 +36,9 @@ bg_color = Color(0.3779188, 0.37791887, 0.37791884, 0.39215687)
 
 [resource]
 Label/colors/font_color = Color(0, 0, 0, 1)
+Label/colors/font_outline_color = Color(1, 1, 1, 1)
+Label/colors/font_shadow_color = Color(0, 0, 0, 0.105882354)
+Label/constants/outline_size = 2
 TabContainer/colors/font_hovered_color = Color(0.2159017, 0.21590173, 0.2159017, 1)
 TabContainer/colors/font_selected_color = Color(0.9079417, 0.9079417, 0.90794164, 1)
 TabContainer/colors/font_unselected_color = Color(0, 0, 0, 1)
