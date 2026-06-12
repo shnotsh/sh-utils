@@ -1,0 +1,51 @@
+[gd_resource type="Theme" format=3 uid="uid://ca8e2oo4gitgr"]
+
+[ext_resource type="FontFile" uid="uid://c8ruesp66hglm" path="res://addons/sh_utils/fonts/IosevkaCustom-Regular.ttf" id="1_t83sj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t83sj"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0, 0, 0, 0.39215687)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fd2qk"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8, 0.8, 0.8, 0.39215687)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_he1qm"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0, 0, 0, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m6o8g"]
+content_margin_left = 12.0
+content_margin_right = 12.0
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qwb7h"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 0.39215687)
+
+[resource]
+Button/fonts/font = ExtResource("1_t83sj")
+Label/fonts/font = ExtResource("1_t83sj")
+TabContainer/fonts/font = ExtResource("1_t83sj")
+TabContainer/styles/panel = SubResource("StyleBoxFlat_t83sj")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_fd2qk")
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_he1qm")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_m6o8g")
+TabContainer/styles/tabbar_background = SubResource("StyleBoxFlat_qwb7h")

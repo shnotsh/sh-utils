@@ -5,11 +5,9 @@ extends Control
 @onready var sys_info_label: Label = %"SysInfoLabel"
 @onready var config_label: Label = %"ConfigLabel"
 @onready var tab_container: TabContainer = $DebugPerformanceOverlay/TabContainer
-@onready var close_button: Button = $CloseButton
 
 
 func _ready() -> void:
-	close_button.pressed.connect(_on_close_button_pressed)
 	sys_info_label.text = "[Hardware]\n%s" % Utils.str_from_dict(Debug.get_hardware_info())
 	config_label.text = "[Config]\n%s" % Utils.str_from_dict(Config.get_all_settings())
 
@@ -29,7 +27,3 @@ func _input(event: InputEvent) -> void:
 				tab_container.current_tab = 1
 			KEY_3:
 				tab_container.current_tab = 2
-
-
-func _on_close_button_pressed() -> void:
-	Debug.debug_force_quit.emit()

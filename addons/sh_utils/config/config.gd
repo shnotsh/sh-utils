@@ -8,6 +8,7 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"fullscreen": true,
 	"vsync": false,
 }
+
 var verbose: bool
 var locales: Array[String]
 var loaded_locales: PackedStringArray = TranslationServer.get_loaded_locales()

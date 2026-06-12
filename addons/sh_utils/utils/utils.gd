@@ -1,6 +1,5 @@
 extends Node
 
-
 #█▓▒░░ MATH ░░▒▓█#
 
 ## Smoothly interpolates a value towards a target using exponential decay. Useful for frame-rate independent smoothing.
@@ -19,7 +18,6 @@ func exp_decay(a: Variant, b: Variant, decay: float, delta: float) -> Variant:
 func move_towards_smooth(a: Variant, b: Variant, delta: float) -> Variant:
 	return lerp(a, b, - (exp(-delta) - 1))
 
-
 #█▓▒░░ STRING CONVERSION ░░▒▓█#
 
 ## Converts an array into a string representation.
@@ -29,7 +27,7 @@ func str_from_array(array: Array, members_separator: String = "\n") -> String:
 	var string: String
 	for member: Variant in array:
 		string += "%s%s" % [member, members_separator]
-	return string
+	return string.trim_suffix(members_separator)
 
 
 ## Converts a dictionary into a string representation.
@@ -39,7 +37,7 @@ func str_from_dict(dict: Dictionary, members_separator: String = "\n") -> String
 	var string: String
 	for member: String in dict:
 		string += "%s: %s%s" % [member, dict[member], members_separator]
-	return string
+	return string.trim_suffix(members_separator)
 
 
 ## Converts a boolean value to a custom string.
@@ -76,26 +74,26 @@ func int_to_roman(num: int) -> String:
 	if num <= 0 or num > 3999:
 		push_error("Error converting integer to roman: Number out of range (must be 1–3999)")
 		return ""
-	
+
 	var values = [
 		1000, 900, 500, 400,
 		100, 90, 50, 40,
 		10, 9, 5, 4, 1
 	]
-	
+
 	var symbols = [
 		"M", "CM", "D", "CD",
 		"C", "XC", "L", "XL",
 		"X", "IX", "V", "IV", "I"
 	]
-	
+
 	var result = ""
-	
+
 	for i in range(values.size()):
 		while num >= values[i]:
 			num -= values[i]
 			result += symbols[i]
-	
+
 	return result
 
 
@@ -111,19 +109,19 @@ func roman_to_int(roman: String) -> int:
 		"D": 500,
 		"M": 1000
 	}
-	
+
 	var total = 0
 	var prev_value = 0
-	
+
 	for i in range(roman.length() - 1, -1, -1):
 		var char = roman[i]
 		var value = values.get(char, 0)
-		
+
 		if value < prev_value:
 			total -= value
 		else:
 			total += value
-		
+
 		prev_value = value
-	
+
 	return total

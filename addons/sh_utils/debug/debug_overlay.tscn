@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ciwlj3vy1mslu"]
 
-[ext_resource type="Theme" uid="uid://dkxqkhpefh2hi" path="res://addons/sh_utils/debug/debug_theme.tres" id="1_uyam7"]
+[ext_resource type="Theme" uid="uid://ca8e2oo4gitgr" path="res://addons/sh_utils/theme/sh_utils_default.tres" id="1_c5g32"]
 [ext_resource type="Script" uid="uid://c7viasqphqug3" path="res://addons/sh_utils/debug/debug_overlay.gd" id="2_l7xgc"]
 
 [node name="DebugOverlay" type="Control" unique_id=877863632]
@@ -11,18 +11,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_uyam7")
+theme = ExtResource("1_c5g32")
 script = ExtResource("2_l7xgc")
 
 [node name="DebugPerformanceOverlay" type="MarginContainer" parent="." unique_id=121557348]
 layout_mode = 1
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -94.0
-grow_horizontal = 0
-grow_vertical = 2
+offset_right = 104.0
+offset_bottom = 74.0
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
@@ -30,7 +25,7 @@ theme_override_constants/margin_bottom = 0
 
 [node name="TabContainer" type="TabContainer" parent="DebugPerformanceOverlay" unique_id=1599749497]
 layout_mode = 2
-tab_alignment = 2
+size_flags_horizontal = 0
 current_tab = 0
 all_tabs_in_front = true
 tab_0/title = "1"
@@ -42,7 +37,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
 text = "PerfMonitor"
-horizontal_alignment = 2
 metadata/_tab_index = 0
 metadata/_tab_name = "1"
 
@@ -52,7 +46,6 @@ visible = false
 layout_mode = 2
 size_flags_vertical = 1
 text = "SysInfo"
-horizontal_alignment = 2
 metadata/_tab_index = 1
 metadata/_tab_name = "2"
 
@@ -62,14 +55,5 @@ visible = false
 layout_mode = 2
 size_flags_vertical = 1
 text = "QuckActions"
-horizontal_alignment = 2
 metadata/_tab_index = 2
 metadata/_tab_name = "3"
-
-[node name="CloseButton" type="Button" parent="." unique_id=115495026]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 5.0
-offset_right = 37.0
-offset_bottom = 36.0
-text = "X"

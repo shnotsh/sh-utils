@@ -25,6 +25,7 @@ func _ready() -> void:
 		add_child(debug_overlay)
 
 
+
 func _input(event: InputEvent) -> void:
 	if OS.is_debug_build():
 		if event.is_action_pressed("sh_toggle_debug_overlay"):
