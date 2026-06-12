@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="sh-utils"
-config/version="0.14"
+config/version="0.15"
 run/main_scene="uid://b56paf0ua1k8m"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 boot_splash/show_image=false
@@ -20,8 +20,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 Utils="*uid://dql4kh1asm01j"
-Debug="*uid://de53ltc0xgbu0"
 Config="*uid://sgtrlkrhqbqu"
+Debug="*uid://de53ltc0xgbu0"
 
 [editor_plugins]
 

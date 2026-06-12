@@ -9,7 +9,9 @@ const DEFAULT_SETTINGS: Dictionary = {
 	"vsync": false,
 }
 
-var verbose: bool
+var project_name: String = ProjectSettings.get_setting("application/config/name")
+var project_ver: String = ProjectSettings.get_setting("application/config/version")
+
 var locales: Array[String]
 var loaded_locales: PackedStringArray = TranslationServer.get_loaded_locales()
 var locale: String
@@ -19,28 +21,43 @@ var _settings: Dictionary
 
 
 func _init() -> void:
-	if OS.is_debug_build():
-		verbose = Debug.verbose
-		Debug.debug_force_quit.connect(_on_debug_force_quit)
-		Debug.debug_toggle_fullscreen.connect(_on_debug_toggle_fullscreen)
-		Debug.debug_toggle_vsync.connect(_on_debug_toggle_vsync)
-
 	_config_global_path = ProjectSettings.globalize_path(CONFIG_PATH)
 	_settings = DEFAULT_SETTINGS.duplicate()
 
-
 	load_config()
 	set_config(_settings)
+
+
+func _input(event: InputEvent) -> void:
+	if OS.is_debug_build():
+		if event.is_action_pressed("sh_toggle_debug_overlay"):
+			Debug.show_debug_overlay = !Debug.show_debug_overlay
+			Debug.debug_overlay.visible = Debug.show_debug_overlay
+
+		if Debug.show_debug_overlay or Debug.debug_shortcuts_without_overlay:
+			if event.is_action_pressed("sh_force_quit"):
+				save_config()
+				get_tree().quit()
+			if event.is_action_pressed("sh_force_reload_scene"):
+				get_tree().reload_current_scene()
+			if event.is_action_pressed("sh_toggle_vsync"):
+				set_vsync(not get_setting("vsync", true))
+			if event.is_action_pressed("sh_toggle_fullscreen"):
+				set_fullscreen(not get_setting("fullscreen", true))
+			if event.is_action_pressed("sh_capture_screenshot"):
+				Debug.capture_screenshot()
 
 
 func load_config() -> void:
 	var cfg: ConfigFile = ConfigFile.new()
 	var err: int = cfg.load(CONFIG_PATH)
 	if err != OK:
-		printerr("\nsh-utils: [Config] ERROR: Failed to load config file (Error code: %d). Using defaults." % err)
+		if OS.is_debug_build():
+			printerr("\ns> %s %s [Config] ERROR: Failed to load config file (Error code: %d). Using defaults." % [project_name, project_ver, err])
 		return
 
-	if verbose: print("\nsh-utils: [Config] loaded from ", _config_global_path)
+	if OS.is_debug_build():
+		print("\n> %s %s [Config] loaded from: " % [project_name, project_ver], _config_global_path)
 
 	_settings["locale"] = cfg.get_value("game", "locale", DEFAULT_SETTINGS["locale"])
 	_settings["fullscreen"] = cfg.get_value("video", "fullscreen", DEFAULT_SETTINGS["fullscreen"])
@@ -75,9 +92,10 @@ func save_config() -> void:
 	var cfg: ConfigFile = set_config(_settings)
 	var save_result: int = cfg.save(CONFIG_PATH)
 	if save_result != OK:
-		printerr("\nsh-utils: [Config] ERROR: Failed to save config to ", _config_global_path, " (error code: ", save_result, ")")
+		printerr("\n> %s %s [Config] ERROR: Failed to save config to " % [project_name, project_ver], _config_global_path, " (error code: ", save_result, ")")
 		return
-	if verbose: print("\nsh-utils: [Config] saved to ", _config_global_path)
+	if OS.is_debug_build():
+		print("\n> %s %s [Config] saved to: " % [project_name, project_ver], _config_global_path)
 
 
 func get_locales() -> Array[String]:
@@ -94,23 +112,9 @@ func _notification(what: int) -> void:
 		save_config()
 
 
-func _on_debug_force_quit() -> void:
-	save_config()
-	get_tree().quit()
-
-
-func _on_debug_toggle_vsync() -> void:
-	set_vsync(not get_setting("vsync", true))
-
-
-func _on_debug_toggle_fullscreen() -> void:
-	set_fullscreen(not get_setting("fullscreen", true))
-
-
 func set_locale(new_locale: String) -> void:
 	if not locales.has(new_locale):
 		new_locale = "en"
-
 	_settings["locale"] = new_locale
 	TranslationServer.set_locale(new_locale)
 	setting_changed.emit("locale", new_locale)

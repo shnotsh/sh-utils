@@ -1,14 +1,9 @@
 extends Node
 
-signal debug_force_quit
-signal debug_toggle_fullscreen
-signal debug_toggle_vsync
-
 const DEBUG_OVERLAY: PackedScene = preload("res://addons/sh_utils/debug/debug_overlay.tscn")
 
 @export var show_debug_overlay: bool = true
 @export var debug_shortcuts_without_overlay: bool = true
-@export var verbose: bool = true
 
 var project_name: String = ProjectSettings.get_setting("application/config/name", "Untitled")
 var project_ver: String = ProjectSettings.get_setting("application/config/version", "0.0")
@@ -23,26 +18,6 @@ func _ready() -> void:
 		debug_overlay = DEBUG_OVERLAY.instantiate()
 		debug_overlay.visible = show_debug_overlay
 		add_child(debug_overlay)
-
-
-
-func _input(event: InputEvent) -> void:
-	if OS.is_debug_build():
-		if event.is_action_pressed("sh_toggle_debug_overlay"):
-			show_debug_overlay = !show_debug_overlay
-			debug_overlay.visible = show_debug_overlay
-
-		if show_debug_overlay or debug_shortcuts_without_overlay:
-			if event.is_action_pressed("sh_force_quit"):
-				debug_force_quit.emit()
-			if event.is_action_pressed("sh_force_reload_scene"):
-				get_tree().reload_current_scene()
-			if event.is_action_pressed("sh_toggle_vsync"):
-				debug_toggle_vsync.emit()
-			if event.is_action_pressed("sh_toggle_fullscreen"):
-				debug_toggle_fullscreen.emit()
-			if event.is_action_pressed("sh_capture_screenshot"):
-				capture_screenshot()
 
 
 func get_hardware_info() -> Dictionary:
