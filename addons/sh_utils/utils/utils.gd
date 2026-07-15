@@ -114,8 +114,8 @@ func roman_to_int(roman: String) -> int:
 	var prev_value = 0
 
 	for i in range(roman.length() - 1, -1, -1):
-		var char = roman[i]
-		var value = values.get(char, 0)
+		var _char = roman[i]
+		var value = values.get(_char, 0)
 
 		if value < prev_value:
 			total -= value

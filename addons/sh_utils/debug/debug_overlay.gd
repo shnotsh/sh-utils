@@ -1,10 +1,11 @@
 extends Control
 
+@onready var performance_overlay: Control = $Performance
 
-@onready var perf_label: Label = %"PerformanceLabel"
-@onready var sys_info_label: Label = %"SysInfoLabel"
-@onready var config_label: Label = %"ConfigLabel"
-@onready var tab_container: TabContainer = $DebugPerformanceOverlay/TabContainer
+@onready var perf_label: Label = %PerformanceLabel
+@onready var sys_info_label: Label = %SysInfoLabel
+@onready var config_label: Label = %ConfigLabel
+@onready var tab_container: TabContainer = $Performance/TabContainer
 
 
 func _ready() -> void:

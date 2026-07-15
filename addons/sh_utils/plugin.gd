@@ -13,5 +13,5 @@ func _enable_plugin() -> void:
 
 func _disable_plugin() -> void:
 	remove_autoload_singleton("Config")
-	remove_autoload_singleton("Utils")
 	remove_autoload_singleton("Debug")
+	remove_autoload_singleton("Utils")

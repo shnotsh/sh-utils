@@ -31,10 +31,10 @@ func _init() -> void:
 func _input(event: InputEvent) -> void:
 	if OS.is_debug_build():
 		if event.is_action_pressed("sh_toggle_debug_overlay"):
-			Debug.show_debug_overlay = !Debug.show_debug_overlay
-			Debug.debug_overlay.visible = Debug.show_debug_overlay
+			Debug.show_debug_performance = !Debug.show_debug_performance
+			Debug.debug_overlay.performance_overlay.visible = Debug.show_debug_performance
 
-		if Debug.show_debug_overlay or Debug.debug_shortcuts_without_overlay:
+		if Debug.show_debug_performance or Debug.debug_shortcuts_without_overlay:
 			if event.is_action_pressed("sh_force_quit"):
 				save_config()
 				get_tree().quit()
@@ -53,11 +53,11 @@ func load_config() -> void:
 	var err: int = cfg.load(CONFIG_PATH)
 	if err != OK:
 		if OS.is_debug_build():
-			printerr("\ns> %s %s [Config] ERROR: Failed to load config file (Error code: %d). Using defaults." % [project_name, project_ver, err])
+			printerr("s> %s %s [Config] ERROR: Failed to load config file (Error code: %d). Using defaults." % [project_name, project_ver, err])
 		return
 
 	if OS.is_debug_build():
-		print("\n> %s %s [Config] loaded from: " % [project_name, project_ver], _config_global_path)
+		print("> %s %s [Config] loaded from: " % [project_name, project_ver], _config_global_path)
 
 	_settings["locale"] = cfg.get_value("game", "locale", DEFAULT_SETTINGS["locale"])
 	_settings["fullscreen"] = cfg.get_value("video", "fullscreen", DEFAULT_SETTINGS["fullscreen"])
@@ -92,10 +92,10 @@ func save_config() -> void:
 	var cfg: ConfigFile = set_config(_settings)
 	var save_result: int = cfg.save(CONFIG_PATH)
 	if save_result != OK:
-		printerr("\n> %s %s [Config] ERROR: Failed to save config to " % [project_name, project_ver], _config_global_path, " (error code: ", save_result, ")")
+		printerr("> %s %s [Config] ERROR: Failed to save config to " % [project_name, project_ver], _config_global_path, " (error code: ", save_result, ")")
 		return
 	if OS.is_debug_build():
-		print("\n> %s %s [Config] saved to: " % [project_name, project_ver], _config_global_path)
+		print("> %s %s [Config] saved to: " % [project_name, project_ver], _config_global_path)
 
 
 func get_locales() -> Array[String]:

@@ -1,23 +1,19 @@
 extends Node
 
-const DEBUG_OVERLAY: PackedScene = preload("res://addons/sh_utils/debug/debug_overlay.tscn")
 
-@export var show_debug_overlay: bool = true
+@export var show_debug_performance: bool = false
 @export var debug_shortcuts_without_overlay: bool = true
 
 var project_name: String = ProjectSettings.get_setting("application/config/name", "Untitled")
 var project_ver: String = ProjectSettings.get_setting("application/config/version", "0.0")
 
-var debug_overlay: Control
+@onready var debug_overlay: Control = $DebugOverlay
 
 
 func _ready() -> void:
 	if OS.is_debug_build():
 		register_debug_keyboard_actions()
-
-		debug_overlay = DEBUG_OVERLAY.instantiate()
-		debug_overlay.visible = show_debug_overlay
-		add_child(debug_overlay)
+		debug_overlay.performance_overlay.visible = show_debug_performance
 
 
 func get_hardware_info() -> Dictionary:
